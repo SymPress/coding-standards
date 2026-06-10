@@ -1,0 +1,20 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/swissspidy/phpstan-no-private/rules.neon
+parameters:
+    level: 9
+    paths:
+        - SymPress/
+        - tests/
+    excludePaths:
+        - tests/fixtures/*
+    bootstrapFiles:
+        - vendor/squizlabs/php_codesniffer/autoload.php
+        - vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
+    scanDirectories:
+        # The WordPress Coding Standards neither use Composer autoloading, nor a custom autoloader, so we need to scan.
+        - vendor/wp-coding-standards/wpcs/WordPress
+    tmpDir: tmp
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#^Cannot cast mixed to \w+\.$#'

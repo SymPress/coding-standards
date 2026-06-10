@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd"
+    name="SymPress-PHPCS"
+>
+
+    <description>The coding standard for the SymPress Coding Standards package itself.</description>
+
+    <!-- Check for cross-version support for PHP 8.5 and higher. -->
+    <config name="testVersion" value="8.5-" />
+    <config name="minimum_wp_version" value="7.0" />
+
+    <file>./SymPress</file>
+    <file>./tests</file>
+    <exclude-pattern>*/tests/e2e/test-package/*</exclude-pattern>
+    <exclude-pattern>*/tests/fixtures/*</exclude-pattern>
+
+    <!-- Use colors, and show sniff error codes and progress. -->
+    <arg name="colors" />
+    <arg value="sp" />
+
+    <rule ref="SymPress-Pure" />
+
+    <!-- PHPCS requires Sniff::process(File $phpcsFile, $stackPtr) without a native $stackPtr type. -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+        <severity>0</severity>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="SymPress.Functions.ArgumentTypeDeclaration">
+        <properties>
+            <property name="allowedMethodNames" type="array">
+                <element value="process" />
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="SymPress.Functions.FunctionLength">
+        <exclude-pattern>/SymPress/Sniffs/*</exclude-pattern>
+        <exclude-pattern>/tests/unit/*</exclude-pattern>
+    </rule>
+
+    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+        <exclude-pattern>/tests/bootstrap.php</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.SuperGlobalVariable">
+        <exclude-pattern>/tests/*</exclude-pattern>
+    </rule>
+
+</ruleset>
