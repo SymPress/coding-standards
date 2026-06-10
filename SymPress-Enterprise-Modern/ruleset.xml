@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd"
+    name="SymPress-Enterprise-Modern"
+>
+
+    <description>Enterprise default profile for current WordPress projects running PHP 8.4+ and WordPress 7.0+.</description>
+
+    <rule ref="SymPress-WordPress" />
+
+    <config name="testVersion" value="8.4-" />
+    <config name="minimum_wp_version" value="7.0" />
+
+    <rule ref="SymPress.Classes.AccessorNaming">
+        <type>warning</type>
+    </rule>
+    <rule ref="SymPress.Classes.PropertyLimit">
+        <type>warning</type>
+    </rule>
+    <rule ref="SymPress.ControlStructures.DisallowElse">
+        <type>warning</type>
+    </rule>
+    <rule ref="SymPress.Functions.FunctionLength">
+        <type>warning</type>
+    </rule>
+    <rule ref="SymPress.Variables.RedundantAssignment">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator">
+        <type>warning</type>
+    </rule>
+</ruleset>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd"
+    name="SymPress-Boundary"
+>
+
+    <description>Rules for WordPress boundary files: plugin entrypoints, theme functions, bootstrap scripts, and integration glue.</description>
+
+    <rule ref="SymPress-WordPress">
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols" />
+        <exclude name="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.SuperGlobalVariable" />
+        <exclude name="SymPress.Functions.DisallowGlobalFunction.Found" />
+        <exclude name="SymPress.PHP.DisallowTopLevelDefine.Found" />
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound" />
+    </rule>
+</ruleset>
