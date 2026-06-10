@@ -59,8 +59,6 @@ composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer tru
 composer require --dev sympress/coding-standards
 ```
 
-Inside this monorepo, the package is resolved through the existing path repository.
-
 ### Global Installation
 
 The package can also be installed globally:
@@ -421,16 +419,16 @@ Run PHPUnit:
 composer tests
 ```
 
+Run PHPUnit with coverage reports when Xdebug or PCOV is available:
+
+```bash
+composer tests:coverage
+```
+
 Run the full QA script:
 
 ```bash
 composer qa
-```
-
-Inside this DDEV project, use the root vendor binaries when the package is installed as a path dependency:
-
-```bash
-ddev exec 'cd packages/coding-standards && ../../vendor/bin/phpcs --standard=phpcs.xml'
 ```
 
 ## Copyright and License

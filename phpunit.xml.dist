@@ -22,11 +22,4 @@
             <directory suffix=".php">SymPress</directory>
         </include>
     </source>
-    <coverage>
-        <report>
-            <clover outputFile="tmp/coverage.xml" />
-            <html outputDirectory="tmp/coverage" />
-            <text outputFile="php://stdout" showUncoveredFiles="true" showOnlySummary="true" />
-        </report>
-    </coverage>
 </phpunit>
