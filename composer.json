@@ -1,6 +1,6 @@
 {
     "name": "sympress/coding-standards",
-    "description": "SymPress coding standards for WordPress projects.",
+    "description": "Enterprise PHP coding standards for WordPress and Symfony-inspired development.",
     "license": "GPL-2.0-or-later",
     "type": "phpcodesniffer-standard",
     "keywords": [
