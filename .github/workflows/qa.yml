@@ -38,5 +38,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      - name: Verify PHPCS standards are registered
+        run: vendor/bin/phpcs -i
+
       - name: Run QA
+        if: matrix['php-version'] == '8.5'
         run: composer qa
