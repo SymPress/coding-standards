@@ -1,0 +1,42 @@
+{
+    "index.php": [
+        {
+            "source": "WordPress.DateTime.RestrictedFunctions.date_date",
+            "line": 5
+        },
+        {
+            "source": "WordPress.Security.EscapeOutput.OutputNotEscaped",
+            "line": 11
+        },
+        {
+            "source": "SymPress.ControlStructures.DisallowElse.ElseFound",
+            "line": 12
+        },
+        {
+            "source": "WordPress.Security.EscapeOutput.OutputNotEscaped",
+            "line": 13
+        }
+    ],
+    "template.php": [
+        {
+            "source": "WordPress.DateTime.RestrictedFunctions.date_date",
+            "line": 5
+        },
+        {
+            "source": "WordPress.Security.EscapeOutput.OutputNotEscaped",
+            "line": 11
+        },
+        {
+            "source": "WordPress.Security.EscapeOutput.OutputNotEscaped",
+            "line": 13
+        },
+        {
+            "source": "SymPress.Formatting.TrailingSemicolon.Found",
+            "line": 13
+        },
+        {
+            "source": "SymPress.Functions.DisallowCallUserFunc.call_user_func_call_user_func",
+            "line": 16
+        }
+    ]
+}
