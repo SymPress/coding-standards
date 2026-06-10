@@ -4,7 +4,7 @@ SymPress Coding Standards separates the PHP version required to run the standard
 
 ## Runtime Requirement
 
-The package can be installed on PHP 8.2 or newer. Projects that use syntax introduced after the PHP version running PHP_CodeSniffer should run PHPCS on the same PHP minor version as the project target, because tokenization of newer language syntax depends on the executing PHP runtime.
+The package can be installed on PHP 8.4 or newer. Projects that use syntax introduced after the PHP version running PHP_CodeSniffer should run PHPCS on the same PHP minor version as the project target, because tokenization of newer language syntax depends on the executing PHP runtime.
 
 ## Enterprise Profiles
 
