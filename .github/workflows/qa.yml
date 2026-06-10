@@ -16,8 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - '8.2'
-          - '8.3'
           - '8.4'
           - '8.5'
 
@@ -42,5 +40,4 @@ jobs:
         run: vendor/bin/phpcs -i
 
       - name: Run QA
-        if: matrix['php-version'] == '8.5'
         run: composer qa

@@ -25,7 +25,7 @@ Every release candidate must be verified against the required matrix before tagg
 
 | Dimension | Required | Experimental |
 | --------- | -------- | ------------ |
-| PHP runtime | Install and PHPCS discovery on 8.2, 8.3, 8.4, and 8.5; full package QA on 8.5 | next PHP minor when available |
+| PHP runtime | Full package QA on 8.4 and 8.5 | next PHP minor when available |
 | PHP_CodeSniffer | 3.x supported range | 4.x until promoted |
 | WordPress target config | 6.5, 7.0 | latest trunk when useful |
 | Standards | WPCS, VIPWPCS, Slevomat, PHPCompatibility | dependency pre-releases |

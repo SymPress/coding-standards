@@ -75,7 +75,7 @@
         ],
         "static-analysis": [
             "Composer\\Config::disableProcessTimeout",
-            "phpstan analyse"
+            "phpstan analyse --memory-limit=1G"
         ],
         "tests": [
             "Composer\\Config::disableProcessTimeout",

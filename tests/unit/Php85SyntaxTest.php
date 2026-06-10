@@ -51,6 +51,8 @@ PHP;
     #[Test]
     public function php85PipeTokenIsClassifiedAsOperator(): void
     {
+        $this->requiresPhp85Runtime();
+
         $file = $this->factoryFile(self::CODE, '8.5');
         $tokens = $file->getTokens();
 
@@ -64,6 +66,8 @@ PHP;
     #[Test]
     public function sympressPureParsesPhp85SyntaxWithoutSyntaxErrors(): void
     {
+        $this->requiresPhp85Runtime();
+
         $tempDir = sys_get_temp_dir() . '/sympress-cs-php85-' . bin2hex(random_bytes(8));
         self::assertTrue(mkdir($tempDir));
 
@@ -90,5 +94,14 @@ PHP;
             unlink($file);
             rmdir($tempDir);
         }
+    }
+
+    private function requiresPhp85Runtime(): void
+    {
+        if (PHP_VERSION_ID >= 80500) {
+            return;
+        }
+
+        self::markTestSkipped('PHP 8.5 syntax tokenization requires a PHP 8.5 runtime.');
     }
 }

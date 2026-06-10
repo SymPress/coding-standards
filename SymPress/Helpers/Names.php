@@ -14,6 +14,8 @@ use function array_keys;
 use function array_merge;
 use function array_unique;
 use function array_values;
+use function constant;
+use function defined;
 use function in_array;
 use function ltrim;
 
@@ -102,7 +104,7 @@ final class Names
         static $tokens;
 
         if ($tokens === null) {
-            $tokens = array_values(array_unique(array_merge(
+            $tokens = array_merge(
                 array_keys(Tokens::$arithmeticTokens),
                 array_keys(Tokens::$assignmentTokens),
                 array_keys(Tokens::$equalityTokens),
@@ -125,12 +127,17 @@ final class Names
                     T_ELLIPSIS,
                     T_FN_ARROW,
                     T_MATCH_ARROW,
-                    T_PIPE,
                     T_STRING_CONCAT,
                     T_TYPE_INTERSECTION,
                     T_TYPE_UNION,
                 ],
-            )));
+            );
+
+            if (defined('T_PIPE')) {
+                $tokens[] = constant('T_PIPE');
+            }
+
+            $tokens = array_values(array_unique($tokens));
         }
 
         return $tokens;

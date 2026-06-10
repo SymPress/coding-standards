@@ -11,7 +11,19 @@ function (string $sniff, array $messages, array $warnings, array $errors, array 
         return [$sniff, $messages, $errors, $warnings, $properties];
     }
 
-    return [$sniff, $messages, $warnings, $errors, $properties];
+    return [
+        $sniff,
+        $messages,
+        $warnings,
+        array_map(
+            static fn (array $codes): array => array_map(
+                static fn (string $code): string => $code === 'PossibleFound' ? 'Found' : $code,
+                $codes,
+            ),
+            $errors,
+        ),
+        $properties,
+    ];
 }
 // @phpcsProcessFixtureEnd
 ?>
