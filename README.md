@@ -31,7 +31,7 @@ The package is designed for projects that keep domain and application code frame
 
 The SymPress Coding Standards package requires:
 
-- PHP 8.2 or newer to run the standard
+- PHP 8.4 or newer to run the standard
 - Composer 2
 - PHP_CodeSniffer 3.13.5 or newer on the 3.x line
 - PHPCompatibility 9.3 or 10
@@ -42,7 +42,7 @@ The SymPress Coding Standards package requires:
 - WordPress Coding Standards 3.1 or newer
 - WordPress VIP Coding Standards
 
-The enterprise profiles make the target PHP and WordPress support level explicit. The package can run on PHP 8.2+, while individual projects should run PHP_CodeSniffer on a PHP runtime that can tokenize the syntax used by that project.
+The enterprise profiles make the target PHP and WordPress support level explicit. Run PHP_CodeSniffer on a PHP runtime that can tokenize the syntax used by the project being checked.
 
 When installed for local development, this package also declares PHPUnit and PHPStan-related development dependencies.
 
@@ -112,7 +112,7 @@ This package contains these rulesets:
 - `SymPress-WordPress`: Extends `SymPress-Pure` with WordPress security, database, hook, i18n,
   compatibility, selected VIP checks, and WordPress i18n line-length exceptions. This layer does not pin a target PHP or WordPress version by itself.
 - `SymPress-Boundary`: WordPress boundary layer for plugin files, theme functions, bootstrap scripts, and integration glue.
-- `SymPress-Enterprise-LTS`: Conservative enterprise profile for PHP 8.2+ and WordPress 6.5+ migrations.
+- `SymPress-Enterprise-LTS`: Conservative enterprise profile for WordPress 6.5+ migrations.
 - `SymPress-Enterprise-Modern`: Recommended enterprise default for PHP 8.4+ and WordPress 7.0+ projects.
 - `SymPress-Enterprise-Next`: Strict profile for new codebases on PHP 8.5+ and WordPress 7.0+.
 - `SymPress-Plugin`: Compatibility name for `SymPress-Enterprise-Next`.
@@ -134,7 +134,7 @@ New enterprise projects should choose an explicit compatibility profile:
 
 | Profile | Use when | Target |
 | ------- | -------- | ------ |
-| `SymPress-Enterprise-LTS` | A large legacy codebase needs conservative rollout and warning-first architecture rules. | PHP 8.2+, WordPress 6.5+ |
+| `SymPress-Enterprise-LTS` | A large legacy codebase needs conservative rollout and warning-first architecture rules. | WordPress 6.5+ |
 | `SymPress-Enterprise-Modern` | A current enterprise project wants strict security and correctness without forcing every style preference immediately. | PHP 8.4+, WordPress 7.0+ |
 | `SymPress-Enterprise-Next` | A new package or greenfield project intentionally tracks the newest supported stack. | PHP 8.5+, WordPress 7.0+ |
 
