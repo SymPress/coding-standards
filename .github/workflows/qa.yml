@@ -1,43 +1,28 @@
 name: QA
 
 on:
+  pull_request:
   push:
     branches:
       - main
-  pull_request:
   workflow_dispatch:
 
-jobs:
-  qa:
-    name: PHP ${{ matrix.php-version }}
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
+jobs:
+  workflows:
+    uses: sympress/workflows/.github/workflows/lint-workflows.yml@v1
+
+  qa:
     strategy:
       fail-fast: false
       matrix:
         php-version:
           - '8.4'
           - '8.5'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-          tools: composer:v2
-
-      - name: Validate Composer metadata
-        run: composer validate --strict
-
-      - name: Install dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
-
-      - name: Verify PHPCS standards are registered
-        run: vendor/bin/phpcs -i
-
-      - name: Run QA
-        run: composer qa
+    uses: sympress/workflows/.github/workflows/sympress-qa.yml@v1
+    with:
+      php_version: ${{ matrix.php-version }}
+    secrets:
+      COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH_JSON }}
