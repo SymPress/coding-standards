@@ -33,7 +33,7 @@ The package is designed for projects that keep domain and application code frame
 
 The SymPress Coding Standards package requires:
 
-- PHP 8.4 or newer to run the standard
+- PHP 8.5 or newer to run the standard
 - Composer 2
 - PHP_CodeSniffer 3.13.5 or newer on the 3.x line
 - PHPCompatibility 9.3 or 10
@@ -252,6 +252,22 @@ Example: change the maximum function length:
 <rule ref="SymPress.Functions.FunctionLength">
     <properties>
         <property name="maxLength" type="integer" value="80" />
+    </properties>
+</rule>
+```
+
+Example: change class and file length guardrails:
+
+```xml
+<rule ref="SymPress.Classes.ClassLength">
+    <properties>
+        <property name="maxLength" type="integer" value="700" />
+    </properties>
+</rule>
+
+<rule ref="SymPress.Files.FileLength">
+    <properties>
+        <property name="maxLength" type="integer" value="1200" />
     </properties>
 </rule>
 ```
