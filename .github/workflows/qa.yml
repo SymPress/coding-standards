@@ -15,14 +15,8 @@ jobs:
     uses: sympress/workflows/.github/workflows/lint-workflows.yml@v1
 
   qa:
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - '8.4'
-          - '8.5'
     uses: sympress/workflows/.github/workflows/sympress-qa.yml@v1
     with:
-      php_version: ${{ matrix.php-version }}
+      php_version: '8.5'
     secrets:
       COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH_JSON }}

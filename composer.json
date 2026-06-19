@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": ">=8.4 <9.0",
+        "php": "^8.5",
         "automattic/vipwpcs": "^3.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpcompatibility/php-compatibility": "^9.3 || ^10.0@alpha",
@@ -81,14 +81,14 @@
             "Composer\\Config::disableProcessTimeout",
             "phpunit"
         ],
-        "tests:coverage": [
-            "Composer\\Config::disableProcessTimeout",
-            "phpunit --coverage-text --coverage-clover tmp/coverage.xml --coverage-html tmp/coverage"
-        ],
         "qa": [
             "@cs",
             "@static-analysis",
             "@tests"
+        ],
+        "tests:coverage": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --coverage-text --coverage-clover tmp/coverage.xml --coverage-html tmp/coverage"
         ]
     }
 }
