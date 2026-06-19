@@ -9,11 +9,13 @@ The package exposes these SymPress custom sniffs:
 - `SymPress.Classes.AccessorNaming`
 - `SymPress.Classes.DeprecatedSerializableInterface`
 - `SymPress.Classes.DeprecatedSerializeMagicMethod`
+- `SymPress.Classes.ClassLength`
 - `SymPress.Classes.PropertyLimit`
 - `SymPress.Complexity.NestingLevel`
 - `SymPress.ControlStructures.AlternativeSyntax`
 - `SymPress.ControlStructures.DisallowElse`
 - `SymPress.Encoding.Utf8EncodingComment`
+- `SymPress.Files.FileLength`
 - `SymPress.Files.LineLength`
 - `SymPress.Formatting.AlphabeticalUseStatements`
 - `SymPress.Formatting.TrailingSemicolon`

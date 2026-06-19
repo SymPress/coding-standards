@@ -15,6 +15,9 @@
     <rule ref="SymPress.Classes.AccessorNaming">
         <type>warning</type>
     </rule>
+    <rule ref="SymPress.Classes.ClassLength">
+        <type>warning</type>
+    </rule>
     <rule ref="SymPress.Classes.PropertyLimit">
         <type>warning</type>
     </rule>
@@ -22,6 +25,9 @@
         <type>warning</type>
     </rule>
     <rule ref="SymPress.Functions.FunctionLength">
+        <type>warning</type>
+    </rule>
+    <rule ref="SymPress.Files.FileLength">
         <type>warning</type>
     </rule>
     <rule ref="SymPress.Variables.RedundantAssignment">

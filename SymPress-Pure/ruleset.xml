@@ -16,6 +16,7 @@
     <rule ref="SymPress.Classes.DeprecatedSerializableInterface" />
     <rule ref="SymPress.Classes.DeprecatedSerializeMagicMethod" />
     <rule ref="SymPress.Classes.AccessorNaming" />
+    <rule ref="SymPress.Classes.ClassLength" />
     <rule ref="SymPress.Classes.PropertyLimit" />
     <rule ref="SymPress.Complexity.NestingLevel">
         <properties>
@@ -30,6 +31,7 @@
             <property name="lineLimit" type="integer" value="120" />
         </properties>
     </rule>
+    <rule ref="SymPress.Files.FileLength" />
     <rule ref="SymPress.Formatting.AlphabeticalUseStatements" />
     <rule ref="SymPress.Formatting.UnnecessaryNamespaceUsage" />
     <rule ref="SymPress.Functions.ArgumentTypeDeclaration" />

@@ -40,6 +40,7 @@ profile, not in the shared enterprise default.
 | `SymPress.Arrays.ArrayDoubleArrowAlignment` | Formatting | Error, fixable where safe | Normalizes multiline array alignment. |
 | `SymPress.Arrays.MultiLineArray` | Formatting | Error, fixable where safe | Keeps multiline arrays stable in diffs. |
 | `SymPress.Classes.AccessorNaming` | Architecture | Warning in adoption, strict in Next | Opinionated. Tune or demote when a domain model intentionally avoids getter/setter naming. |
+| `SymPress.Classes.ClassLength` | Maintainability | Warning | Signals classes that likely need responsibility review. Default threshold: 500 effective lines. |
 | `SymPress.Classes.DeprecatedSerializableInterface` | Risk | Error | Blocks deprecated serialization APIs. |
 | `SymPress.Classes.DeprecatedSerializeMagicMethod` | Risk | Error | Blocks deprecated magic serialization APIs. |
 | `SymPress.Classes.PropertyLimit` | Architecture | Warning in enterprise profiles | Signals large objects. Treat as design pressure, not proof of a bug. |
@@ -47,6 +48,7 @@ profile, not in the shared enterprise default.
 | `SymPress.ControlStructures.AlternativeSyntax` | Template formatting | Warning | Applies to template syntax rules. |
 | `SymPress.ControlStructures.DisallowElse` | Architecture | Warning in enterprise profiles | Encourages early returns. Exclude when legacy diff churn is too high. |
 | `SymPress.Encoding.Utf8EncodingComment` | Formatting | Warning | Keeps source encoding comments consistent. |
+| `SymPress.Files.FileLength` | Maintainability | Warning | Signals oversized files. Default threshold: 1000 physical lines. |
 | `SymPress.Files.LineLength` | Maintainability | Warning | WordPress i18n functions are allowed in the WordPress layer. |
 | `SymPress.Formatting.AlphabeticalUseStatements` | Formatting | Error, fixable | Mechanical import ordering. |
 | `SymPress.Formatting.TrailingSemicolon` | Template formatting | Error, fixable | Template shorthand output cleanup. |
