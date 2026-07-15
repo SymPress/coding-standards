@@ -45,4 +45,34 @@ final class RulesetConfigurationTest extends TestCase
             $contents,
         );
     }
+
+    public function testCustomSniffCatalogsMatchImplementations(): void
+    {
+        $libPath = rtrim((string) getenv('LIB_PATH'), '/');
+        $implemented = [];
+
+        foreach (glob("{$libPath}/SymPress/Sniffs/*/*Sniff.php") ?: [] as $file) {
+            $relative = substr($file, strlen("{$libPath}/SymPress/Sniffs/"));
+            [$category, $class] = explode('/', $relative);
+            $implemented[] = sprintf('SymPress.%s.%s', $category, substr($class, 0, -strlen('Sniff.php')));
+        }
+
+        sort($implemented);
+
+        foreach (['docs/Sniffs.md', 'docs/Rules.md'] as $documentation) {
+            preg_match_all(
+                '/`(SymPress\.[A-Za-z0-9.]+)`/',
+                (string) file_get_contents("{$libPath}/{$documentation}"),
+                $matches,
+            );
+            $documented = $matches[1];
+            sort($documented);
+
+            self::assertSame(
+                $implemented,
+                $documented,
+                "{$documentation} must list every implemented custom sniff once.",
+            );
+        }
+    }
 }

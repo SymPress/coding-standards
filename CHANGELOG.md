@@ -13,7 +13,7 @@ The format follows Keep a Changelog style sections and semantic versioning.
 
 ### Changed
 
-- Lowered the package runtime requirement to PHP 8.2+ while keeping explicit profile targets for newer PHP and WordPress stacks.
+- Raised the package runtime requirement to PHP 8.5+.
 - Allowed stable PHPCompatibility 9.x in addition to PHPCompatibility 10 alpha releases.
 - Made base layers version-neutral and mapped `SymPress-Plugin`, `SymPress-Core`, and `SymPress-Extra` to `SymPress-Enterprise-Next`.
 - Updated `SymPress-Templates` to include the WordPress security layer before applying template-specific rules.
