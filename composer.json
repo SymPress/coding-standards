@@ -28,7 +28,7 @@
         "php": "^8.5",
         "automattic/vipwpcs": "^3.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-        "phpcompatibility/php-compatibility": "^9.3 || ^10.0@alpha",
+        "phpcompatibility/php-compatibility": "^9.3 || ^10.0",
         "phpcsstandards/phpcsextra": "^1.2",
         "phpcsstandards/phpcsutils": "^1.0",
         "sirbrillig/phpcs-variable-analysis": "^2.11",
@@ -90,5 +90,6 @@
             "Composer\\Config::disableProcessTimeout",
             "phpunit --coverage-text --coverage-clover tmp/coverage.xml --coverage-html tmp/coverage"
         ]
-    }
+    },
+    "prefer-stable": true
 }
