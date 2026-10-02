@@ -20,13 +20,17 @@ The historical `SymPress-Plugin`, `SymPress-Core`, and `SymPress-Extra` standard
 
 ## PHPCompatibility
 
-The Composer constraint allows stable PHPCompatibility 9.x and PHPCompatibility 10 alpha releases:
+The Composer constraint accepts stable PHPCompatibility 9.x and 10.x releases:
 
 ```json
-"phpcompatibility/php-compatibility": "^9.3 || ^10.0@alpha"
+"phpcompatibility/php-compatibility": "^9.3 || ^10.0"
 ```
 
-Use PHPCompatibility 10 when checking the newest PHP language versions. Use the stable 9.x line when an organization cannot approve alpha dependencies and the target PHP version is covered by that line.
+Use a stable PHPCompatibility 10 release when it becomes available and has been
+verified with all bundled profiles. Until then, fresh stable installations use
+9.x. That line does not cover every newest PHP feature; its passing result cannot
+establish complete PHP 8.5 compatibility. The package's syntax, behavioral and
+static-analysis gates run on PHP 8.5 separately.
 
 ## WordPress VIP Positioning
 

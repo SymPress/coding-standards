@@ -42,3 +42,15 @@ The package exposes these SymPress custom sniffs:
 - `SymPress.WordPress.HookPriority`
 
 Run `phpcs -e --standard=SymPress` to see the active custom sniff list resolved by the installed package.
+
+## WordPress SQL receiver coverage
+
+The profile retains WPCS `WordPress.DB.PreparedSQL` and
+`WordPress.DB.PreparedSQLPlaceholders`. WPCS 3.1 identifies receivers by tokens
+named `$wpdb` or `wpdb`; a property literally called `wpdb` can be covered,
+but typed `$this->db`, aliases, factory results and differently named parameters
+are not reliably covered. Consumers must also include the WordPress PHPStan
+profile from `sympress/qa`, which registers the receiver-type based
+`sympress.preparedSql` rule. This complementary check is not a custom PHPCS sniff
+and does not change the pure PHP profile. Audited raw SQL boundaries require a
+narrow documented exception and regression tests.
