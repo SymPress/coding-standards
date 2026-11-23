@@ -66,7 +66,7 @@ profile, not in the shared enterprise default.
 | `SymPress.PHP.DisallowShortOpenTag` | Risk | Error | Blocks non-portable PHP tags. |
 | `SymPress.PHP.DisallowTopLevelDefine` | Architecture | Error outside boundary layer | Constants at entrypoints belong in `SymPress-Boundary`. |
 | `SymPress.PHP.ShortOpenTagWithEcho` | Template formatting | Error, fixable | Converts verbose echo tags in templates. |
-| `SymPress.Strings.VariableInDoubleQuotes` | Formatting | Warning | Prefer interpolation forms that are easier to scan. |
+| `SymPress.Strings.VariableInDoubleQuotes` | Formatting | Error, fixable where safe | Prefer interpolation forms that are easier to scan. Interpolations without an equivalent braced form, such as `$items[01]`, are reported but not fixed. |
 | `SymPress.Usage.IsNull` | Formatting | Warning, fixable | Prefer strict null comparison. |
 | `SymPress.Variables.RedundantAssignment` | Maintainability | Warning in enterprise profiles | Intentionally aggressive. Suppress locally when a named value improves debugging or review. |
 | `SymPress.WhiteSpace.ConstantSpacing` | Formatting | Warning | Keeps constants readable. |
