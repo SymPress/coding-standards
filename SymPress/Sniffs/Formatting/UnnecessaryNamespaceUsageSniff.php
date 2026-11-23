@@ -10,12 +10,15 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens as PHP_CodeSniffer_Tokens;
 
 use function array_key_exists;
+use function array_map;
 use function array_slice;
+use function explode;
 use function in_array;
 use function preg_split;
 use function str_replace;
 use function strlen;
 use function strpos;
+use function strtolower;
 use function substr;
 use function trim;
 
@@ -404,6 +407,16 @@ class UnnecessaryNamespaceUsageSniff implements Sniff
     }
 
     /**
+     * Class names and aliases are case-insensitive in PHP.
+     *
+     * @param array<string, string> $useStatements
+     */
+    private function isImportedName(string $name, array $useStatements): bool
+    {
+        return in_array(strtolower($name), array_map(strtolower(...), $useStatements), true);
+    }
+
+    /**
      * Check if short hand is possible.
      *
      * @param File   $phpcsFile     PHP CS File
@@ -442,6 +455,11 @@ class UnnecessaryNamespaceUsageSniff implements Sniff
             $replaceClassName = true;
         } elseif ($namespace !== '' && strpos($fullClassName, $namespace) === 0) {
             $replacement = substr($fullClassName, strlen($namespace));
+
+            // An import with the same short name would make the shortened name refer to another class.
+            if ($this->isImportedName(explode('\\', $replacement)[0], $useStatements)) {
+                return;
+            }
 
             $data    = [
                 $className,
