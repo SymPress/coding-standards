@@ -132,3 +132,9 @@ function () {
     PHP;
     print $value;
 };
+
+// Reported, but not fixed: the included template may use $this.
+// @phpcsWarningOnNextLine
+function (string $file) {
+    include $file;
+};

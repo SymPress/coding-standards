@@ -11,6 +11,9 @@ use SymPressCS\SymPress\Helpers\FunctionDocBlock;
 
 final class StaticClosureSniff implements Sniff
 {
+    // Included files and eval'd code run in the closure's scope and may use $this.
+    private const SCOPE_SHARING_TOKENS = [T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE, T_EVAL];
+
     /** @return list<int|string> */
     public function register(): array
     {
@@ -41,8 +44,9 @@ final class StaticClosureSniff implements Sniff
         /** @var array<int, array<string, mixed>> $tokens */
         $tokens = $phpcsFile->getTokens();
 
-        $thisFound = false;
-        $i         = $functionStart + 1;
+        $thisFound         = false;
+        $scopeSharingFound = false;
+        $i                 = $functionStart + 1;
 
         while (!$thisFound && ($i < $functionEnd)) {
             $token = $tokens[$i];
@@ -58,6 +62,7 @@ final class StaticClosureSniff implements Sniff
                 )
             );
 
+            $scopeSharingFound = $scopeSharingFound || in_array($code, self::SCOPE_SHARING_TOKENS, true);
             $i++;
         }
 
@@ -71,6 +76,12 @@ final class StaticClosureSniff implements Sniff
 
         $message = 'Closure found in line %d could be static';
         $line    = (int) $tokens[$stackPtr]['line'];
+
+        if ($scopeSharingFound) {
+            $phpcsFile->addWarning($message, $stackPtr, 'PossiblyStaticClosure', [$line]);
+
+            return;
+        }
 
         if (!$phpcsFile->addFixableWarning($message, $stackPtr, 'PossiblyStaticClosure', [$line])) {
             return;
