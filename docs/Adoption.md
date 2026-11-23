@@ -74,6 +74,10 @@ Inline ignores should include the full sniff code. Security rules should only be
 ## Migration Checklist
 
 - Pick the compatibility profile before changing any code.
+- Convert `else if` to `elseif` before the first run:
+  `vendor/bin/phpcbf --standard=PSR2 --sniffs=PSR2.ControlStructures.ElseIfDeclaration <paths>`.
+  `SlevomatCodingStandard.ControlStructures.EarlyExit` can throw on `else if` (for example inside a
+  nested `if`), which aborts the whole file: no other sniff runs and `phpcbf` fixes nothing in it.
 - Run PHPCS with `-s` so every finding includes a sniff code.
 - Record the first run as a baseline artifact in CI.
 - Fix auto-fixable formatting issues separately from behavior-adjacent changes.
