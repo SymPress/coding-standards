@@ -75,6 +75,14 @@ PHP
             ,
         ];
 
+        foreach (self::variableInDoubleQuotesCases() as $name => [$input, $expected]) {
+            yield "variable in double quoted string: {$name}" => [
+                'SymPress.Strings.VariableInDoubleQuotes',
+                "<?php\n\$message = {$input};\n",
+                "<?php\n\$message = {$expected};\n",
+            ];
+        }
+
         yield 'constant spacing' => [
             'SymPress.WhiteSpace.ConstantSpacing',
             <<<'PHP'
@@ -176,6 +184,37 @@ final class Consumer
 
 PHP
             ,
+        ];
+    }
+
+    /**
+     * Double-quoted string literals before and after fixing; both must evaluate to the same value.
+     *
+     * @return array<string, array{string, string}>
+     */
+    private static function variableInDoubleQuotesCases(): array
+    {
+        return [
+            'property access'                       => ['"Hello $user->name"', '"Hello {$user->name}"'],
+            'nullsafe property access'              => ['"Hello $user?->name"', '"Hello {$user?->name}"'],
+            'only first property is interpolated'   => ['"$user->name->first"', '"{$user->name}->first"'],
+            'integer offset'                        => ['"Item $items[0]"', '"Item {$items[0]}"'],
+            'negative integer offset'               => ['"Item $items[-1]"', '"Item {$items[-1]}"'],
+            'unquoted string offset'                => ['"Item $items[key]"', '"Item {$items[\'key\']}"'],
+            'variable offset'                       => ['"Item $items[$index]"', '"Item {$items[$index]}"'],
+            'only first offset is interpolated'     => ['"$items[0][1]"', '"{$items[0]}[1]"'],
+            'escaped dollar'                        => ['"\$total is $total"', '"\$total is {$total}"'],
+            'escaped backslash before variable'     => ['"C:\\\\$path"', '"C:\\\\{$path}"'],
+            'multiple variables'                    => [
+                '"$first and {$second} and $third"',
+                '"{$first} and {$second} and {$third}"',
+            ],
+            'multi-line string'                     => [
+                "\"first \$first\nsecond \$user->name\"",
+                "\"first {\$first}\nsecond {\$user->name}\"",
+            ],
+            'ambiguous offset is reported only'     => ['"Item $items[01]"', '"Item $items[01]"'],
+            'negative zero offset is reported only' => ['"Item $items[-0]"', '"Item $items[-0]"'],
         ];
     }
 
