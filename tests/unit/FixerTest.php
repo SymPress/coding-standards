@@ -193,6 +193,56 @@ final class Consumer
 PHP
             ,
         ];
+
+        yield 'unnecessary namespace usage keeps names shadowed by imports' => [
+            'SymPress.Formatting.UnnecessaryNamespaceUsage',
+            <<<'PHP'
+<?php
+
+namespace Probe;
+
+use Zeta\Thing;
+use Zeta\Sub;
+use Zeta\Other as Alias;
+
+final class Consumer
+{
+    /** @param \Probe\Thing $thing */
+    public function create(\Probe\Thing $thing): \Probe\Sub\Item
+    {
+        $alias = new \Probe\alias();
+        $local = new \Probe\Local();
+
+        return new \Probe\Sub\Item(\Zeta\Thing::class);
+    }
+}
+
+PHP
+            ,
+            <<<'PHP'
+<?php
+
+namespace Probe;
+
+use Zeta\Thing;
+use Zeta\Sub;
+use Zeta\Other as Alias;
+
+final class Consumer
+{
+    /** @param \Probe\Thing $thing */
+    public function create(\Probe\Thing $thing): \Probe\Sub\Item
+    {
+        $alias = new \Probe\alias();
+        $local = new Local();
+
+        return new \Probe\Sub\Item(Thing::class);
+    }
+}
+
+PHP
+            ,
+        ];
     }
 
     /**
