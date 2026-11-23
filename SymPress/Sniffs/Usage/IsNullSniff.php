@@ -15,6 +15,63 @@ use function is_int;
  */
 class IsNullSniff implements Sniff
 {
+    private const OPERAND_TOKENS = [
+        T_VARIABLE                 => true,
+        T_STRING                   => true,
+        T_NS_SEPARATOR             => true,
+        T_OBJECT_OPERATOR          => true,
+        T_NULLSAFE_OBJECT_OPERATOR => true,
+        T_DOUBLE_COLON             => true,
+        T_SELF                     => true,
+        T_STATIC                   => true,
+        T_PARENT                   => true,
+    ];
+
+    private const SAFE_PREVIOUS_TOKENS = [
+        T_OPEN_TAG            => true,
+        T_OPEN_TAG_WITH_ECHO  => true,
+        T_OPEN_PARENTHESIS    => true,
+        T_OPEN_SQUARE_BRACKET => true,
+        T_OPEN_SHORT_ARRAY    => true,
+        T_OPEN_CURLY_BRACKET  => true,
+        T_CLOSE_CURLY_BRACKET => true,
+        T_SEMICOLON           => true,
+        T_COMMA               => true,
+        T_COLON               => true,
+        T_RETURN              => true,
+        T_ECHO                => true,
+        T_BOOLEAN_AND         => true,
+        T_BOOLEAN_OR          => true,
+        T_LOGICAL_AND         => true,
+        T_LOGICAL_OR          => true,
+        T_LOGICAL_XOR         => true,
+        T_INLINE_THEN         => true,
+        T_INLINE_ELSE         => true,
+        T_COALESCE            => true,
+        T_DOUBLE_ARROW        => true,
+        T_MATCH_ARROW         => true,
+        T_FN_ARROW            => true,
+    ];
+
+    private const SAFE_NEXT_TOKENS = [
+        T_CLOSE_TAG            => true,
+        T_CLOSE_PARENTHESIS    => true,
+        T_CLOSE_SQUARE_BRACKET => true,
+        T_CLOSE_SHORT_ARRAY    => true,
+        T_SEMICOLON            => true,
+        T_COMMA                => true,
+        T_COLON                => true,
+        T_BOOLEAN_AND          => true,
+        T_BOOLEAN_OR           => true,
+        T_LOGICAL_AND          => true,
+        T_LOGICAL_OR           => true,
+        T_LOGICAL_XOR          => true,
+        T_INLINE_THEN          => true,
+        T_INLINE_ELSE          => true,
+        T_COALESCE             => true,
+        T_DOUBLE_ARROW         => true,
+    ];
+
     /** @return array<int> */
     public function register(): array
     {
@@ -75,9 +132,7 @@ class IsNullSniff implements Sniff
             }
         }
 
-        $hasBackslash = $nsToken === null;
-
-        if ($this->isComparisonWithIsNull($phpcsFile, $stackPtr, $hasBackslash)) {
+        if (!$this->isSafeContext($phpcsFile, (int) $prevToken, $tokens[$nextToken]['parenthesis_closer'])) {
             $phpcsFile->addWarning(
                 'Use a comparison against null instead of is_null',
                 $stackPtr,
@@ -164,8 +219,9 @@ class IsNullSniff implements Sniff
     }
 
     /**
-     * Determines if the content between parenthesis warrants keeping the parenthesis for the null
-     * comparison.
+     * The parentheses can only be dropped when the argument is a single operand, e.g.
+     * `$var`, `$obj->prop`, `$arr['key']` or `Foo::bar($x)`; any operator could bind
+     * differently once `=== null` follows.
      */
     private function keepParentheses(
         File $phpcsFile,
@@ -175,92 +231,45 @@ class IsNullSniff implements Sniff
 
         $tokens = $phpcsFile->getTokens();
 
-        // Skip first whitespace, if any.
-        $stackPtrFirstExpressionToken = $stackPtrOpenParenthesis + 1;
+        for ($ptr = $stackPtrOpenParenthesis + 1; $ptr < $stackPtrCloseParenthesis; $ptr++) {
+            $code = $tokens[$ptr]['code'];
 
-        while ($tokens[$stackPtrFirstExpressionToken]['code'] === T_WHITESPACE) {
-            $stackPtrFirstExpressionToken++;
-        }
+            // Call arguments and offsets are grouped already.
+            if ($code === T_OPEN_PARENTHESIS || $code === T_OPEN_SQUARE_BRACKET) {
+                $ptr = $tokens[$ptr]['parenthesis_closer'] ?? $tokens[$ptr]['bracket_closer'];
 
-        // Skip last whitespace, if any.
-        $stackPtrLastExpressionToken = $stackPtrCloseParenthesis - 1;
+                continue;
+            }
 
-        while ($tokens[$stackPtrLastExpressionToken]['code'] === T_WHITESPACE) {
-            $stackPtrLastExpressionToken--;
-        }
-
-        // Look for whitespace between the parentheses.
-        $firstWhitespace = $phpcsFile->findNext(
-            T_WHITESPACE,
-            $stackPtrFirstExpressionToken,
-            $stackPtrLastExpressionToken,
-        );
-
-        // Statements like is_null( $var ) or is_null( Class::method() ) are simple enough
-        // not to require whitespace, so the parentheses can be dropped.
-        // PHPCS will identify statements is_null($a?$b:$c) as missing whitespace before this
-        // sniff is run.
-        if ($firstWhitespace === false) {
-            return false;
-        }
-
-        $innerParenthesis = $phpcsFile->findNext(
-            T_OPEN_PARENTHESIS,
-            $stackPtrFirstExpressionToken,
-            $stackPtrLastExpressionToken,
-        );
-
-        // Something has been wrapped in parentheses ending just before the ending parenthesis of
-        // the is_null statement.
-        if (
-            $innerParenthesis !== false
-            && $tokens[$innerParenthesis]['parenthesis_closer'] === $stackPtrLastExpressionToken
-        ) {
-            $previousWhiteSpace = $phpcsFile->findPrevious(
-                T_WHITESPACE,
-                $innerParenthesis,
-                $stackPtrFirstExpressionToken,
-            );
-
-            // Obviously, statements such as is_null( $a ? $b : ( $c ) ) will trick this check.
-            // They should retain their parenthesis, so see if there is any whitespace before
-            // the opening parenthesis.
-            if ($previousWhiteSpace === false) {
-                return false;
+            if (!isset(self::OPERAND_TOKENS[$code]) && !isset(Tokens::$emptyTokens[$code])) {
+                return true;
             }
         }
 
-        // When in doubt, keep parenthesis.
-        return true;
+        return false;
     }
 
     /**
-     * Comparisons that compare a variable to the result of is_null or to the result of another
-     * is_null, like $var === is_null( $var ) or is_null( $var ) === is_null( $var ).
-     *
-     * These can't be replaced by other constructions and should remain untouched.
+     * `X === null` replaces the call result only if the neighbouring operators bind looser than
+     * `===`, e.g. `is_null($a) . 'x'` or `(int) is_null($a)` would change meaning.
+     * This also covers comparisons with the result, like `$a === is_null($b)`.
      */
-    private function isComparisonWithIsNull(File $phpcsFile, int $stackPtr, bool $hasBackslash): bool
+    private function isSafeContext(File $phpcsFile, int $prevPtr, int $closePtr): bool
     {
-        $prevOnStack = $hasBackslash ? 1 : 2;
+        $tokens = $phpcsFile->getTokens();
 
-        $tokens    = $phpcsFile->getTokens();
-        $prevToken = $phpcsFile->findPrevious(T_WHITESPACE, $stackPtr - $prevOnStack, null, true);
-        $nextToken = $phpcsFile->findNext(Tokens::$emptyTokens, $stackPtr + 1, null, true);
-        $nextToken = $phpcsFile->findNext(
-            Tokens::$emptyTokens,
-            $tokens[$nextToken]['parenthesis_closer'] + 1,
-            null,
-            true,
-        );
+        if ($tokens[$prevPtr]['code'] === T_BOOLEAN_NOT) {
+            $prevPtr = (int) $phpcsFile->findPrevious(Tokens::$emptyTokens, $prevPtr - 1, null, true);
+        }
 
-        return $tokens[$prevToken]['code'] === T_IS_EQUAL ||
-            $tokens[$prevToken]['code'] === T_IS_IDENTICAL ||
-            $tokens[$prevToken]['code'] === T_IS_NOT_EQUAL ||
-            $tokens[$prevToken]['code'] === T_IS_NOT_IDENTICAL ||
-            $tokens[$nextToken]['code'] === T_IS_EQUAL ||
-            $tokens[$nextToken]['code'] === T_IS_IDENTICAL ||
-            $tokens[$nextToken]['code'] === T_IS_NOT_EQUAL ||
-            $tokens[$nextToken]['code'] === T_IS_NOT_IDENTICAL;
+        $prevCode = $tokens[$prevPtr]['code'];
+
+        if (!isset(self::SAFE_PREVIOUS_TOKENS[$prevCode]) && !isset(Tokens::$assignmentTokens[$prevCode])) {
+            return false;
+        }
+
+        $nextPtr = $phpcsFile->findNext(Tokens::$emptyTokens, $closePtr + 1, null, true);
+
+        return $nextPtr !== false && isset(self::SAFE_NEXT_TOKENS[$tokens[$nextPtr]['code']]);
     }
 }

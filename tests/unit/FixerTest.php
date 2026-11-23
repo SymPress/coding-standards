@@ -75,6 +75,14 @@ PHP
             ,
         ];
 
+        foreach (self::isNullCases() as $name => [$input, $expected]) {
+            yield "is null comparison: {$name}" => [
+                'SymPress.Usage.IsNull',
+                "<?php\n{$input}\n",
+                "<?php\n{$expected}\n",
+            ];
+        }
+
         foreach (self::variableInDoubleQuotesCases() as $name => [$input, $expected]) {
             yield "variable in double quoted string: {$name}" => [
                 'SymPress.Strings.VariableInDoubleQuotes',
@@ -184,6 +192,34 @@ final class Consumer
 
 PHP
             ,
+        ];
+    }
+
+    /**
+     * Statements before and after fixing. Unsafe contexts, where `=== null` would bind to
+     * something else than the call result, are reported but left unchanged.
+     *
+     * @return array<string, array{string, string}>
+     */
+    private static function isNullCases(): array
+    {
+        return [
+            'property access'                 => ['return is_null($obj->prop);', 'return $obj->prop === null;'],
+            'static call'                     => ['return is_null(Foo::bar($x));', 'return Foo::bar($x) === null;'],
+            'array offset'                    => ["return is_null(\$items['key']);", "return \$items['key'] === null;"],
+            'fully qualified'                 => ['return \\is_null($value);', 'return $value === null;'],
+            'unspaced coalesce'               => ['return is_null($a??$b);', 'return ($a??$b) === null;'],
+            'negated unspaced and'            => ['return !is_null($a&&$b);', 'return ($a&&$b) !== null;'],
+            'ternary argument'                => ['return is_null($a ? $b : $c);', 'return ($a ? $b : $c) === null;'],
+            'spaced coalesce'                 => ['return is_null( $a ?? $b );', 'return ( $a ?? $b ) === null;'],
+            'logical operand'                 => ['if (is_null($a) && $b) {}', 'if ($a === null && $b) {}'],
+            'ternary condition'               => ['$x = is_null($a) ? 1 : 2;', '$x = $a === null ? 1 : 2;'],
+            'call arguments'                  => ['foo(is_null($a), !is_null($b));', 'foo($a === null, $b !== null);'],
+            'arrow function body'             => ['$f = fn ($a) => is_null($a);', '$f = fn ($a) => $a === null;'],
+            'report only: concat after'       => ["\$x = is_null(\$a) . 'x';", "\$x = is_null(\$a) . 'x';"],
+            'report only: concat before'      => ["\$x = 'x' . is_null(\$a);", "\$x = 'x' . is_null(\$a);"],
+            'report only: cast'               => ['$x = (int) is_null($a);', '$x = (int) is_null($a);'],
+            'report only: negated comparison' => ['return $a === !is_null($b);', 'return $a === !is_null($b);'],
         ];
     }
 
