@@ -130,6 +130,12 @@ functions, while `SymPress-Pure` keeps the line-length rule framework-neutral.
 
 Base layers such as `SymPress-Pure`, `SymPress-WordPress`, `SymPress-Boundary`, and `SymPress-Templates` are version-neutral. Use an enterprise profile or project-level `testVersion` and `minimum_wp_version` settings to define compatibility.
 
+`SymPress-WordPress`, `SymPress-Boundary`, and `SymPress-Templates` require a `testVersion` when used
+directly: without it, PHPCompatibility 9.3.5 aborts every file on PHP 8.4+ with "An error occurred
+during processing", so no rule (security sniffs included) runs. Set it in the project ruleset, for
+example `<config name="testVersion" value="8.4-" />`, or pass `--runtime-set testVersion 8.4-`. The
+enterprise profiles already set it.
+
 ## Enterprise Profiles
 
 New enterprise projects should choose an explicit compatibility profile:
