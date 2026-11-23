@@ -43,6 +43,26 @@ PHP
             ,
         ];
 
+        yield 'static closure keeps closures that include files' => [
+            'SymPress.Functions.StaticClosure',
+            <<<'PHP'
+<?php
+$render = function (string $file): void {
+    include $file;
+};
+
+PHP
+            ,
+            <<<'PHP'
+<?php
+$render = function (string $file): void {
+    include $file;
+};
+
+PHP
+            ,
+        ];
+
         yield 'is null comparison' => [
             'SymPress.Usage.IsNull',
             <<<'PHP'
